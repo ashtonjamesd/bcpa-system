@@ -10,16 +10,15 @@ import com.bcpa.database.DbContext;
 public final class UserRepository implements IUserRepository 
 {
     private final DbContext _db;
-
     private final PasswordHasher _hasher;
 
-    public UserRepository(DbContext db, PasswordHasher hasher) {
+    public UserRepository(final DbContext db, final PasswordHasher hasher) {
         _db = db;
         _hasher = hasher;
     }
 
     @Override
-    public Result<List<User>> GetUsers()
+    public final Result<List<User>> getUsers()
     {
         try
         {
@@ -32,12 +31,12 @@ public final class UserRepository implements IUserRepository
     }
 
     @Override
-    public Result<Boolean> CreateUser(User newUser)
+    public final Result<Boolean> createUser(final User newUser)
     {
         try
         {
             boolean userExists = false;
-            for (User user : _db.users) {
+            for (final User user : _db.users) {
                 if (!user.username.equals(newUser.username)) continue;
 
                 userExists = true;

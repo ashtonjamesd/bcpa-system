@@ -1,11 +1,9 @@
 package com.bcpa.app;
-
-import com.bcpa.app.services.IIOReader;
 import com.bcpa.app.utils.AppMode;
-import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Login.LoginView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.services.IAuthService;
+import com.bcpa.event.services.IEventService;
 
 public final class TicketSystem
 {
@@ -13,33 +11,35 @@ public final class TicketSystem
 
     private AppMode _mode;
 
-    private final IAuthService _auth;
-    private final IIOReader _inputReader;
+    private final IAuthService _authService;
+    private final IEventService _eventService;
 
-    public TicketSystem(IViewManager viewManager, IAuthService auth, IIOReader inputReader)
+    public TicketSystem(final IViewManager viewManager, final IAuthService authService, final IEventService eventService)
     {
         _viewManager = viewManager;
-        _auth = auth;
-        _inputReader = inputReader;
+        _authService = authService;
+        _eventService = eventService;
     }
 
-    public void run() 
+    public final void run() 
     {
-        if (_mode == null) {
+        if (_mode == null) 
+        {
             System.err.println("App mode was net set before app.run was called.");
             return;
         }
 
         // The initial active page for the application is the login page.
-        _viewManager.setActiveView(new LoginView(_viewManager, _auth, _inputReader));
+        _viewManager.setActiveView(new LoginView(_viewManager, _eventService, _authService));
 
-        while (true) {
-            PageView view = _viewManager.getActiveView();
-            view.show();
+        while (true) 
+        {
+            _viewManager.getActiveView().show();
         }
     }
 
-    public void setMode(AppMode mode) {
+    public final void setMode(final AppMode mode) 
+    {
         _mode = mode;
     }
 }

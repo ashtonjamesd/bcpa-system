@@ -6,6 +6,6 @@ import com.bcpa.app.utils.Result;
 import com.bcpa.authentication.models.User;
 
 public interface IUserRepository {
-    public Result<List<User>> GetUsers();
-    public Result<Boolean> CreateUser(User newUser);
+    public Result<List<User>> getUsers();
+    public Result<Boolean> createUser(User user);
 }

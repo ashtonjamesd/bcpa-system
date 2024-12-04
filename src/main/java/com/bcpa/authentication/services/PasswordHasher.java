@@ -3,11 +3,11 @@ package com.bcpa.authentication.services;
 import org.mindrot.jbcrypt.BCrypt;
 
 public final class PasswordHasher {
-    public String hash(String password) {
+    public final String hash(final String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public boolean check(String password, String hashedPassword) {
+    public final boolean check(final String password, final String hashedPassword) {
         return BCrypt.checkpw(password, hashedPassword);
     }
 }

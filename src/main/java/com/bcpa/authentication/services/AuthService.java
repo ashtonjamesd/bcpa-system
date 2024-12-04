@@ -1,25 +1,29 @@
 package com.bcpa.authentication.services;
 
+import java.util.List;
+
 import com.bcpa.app.utils.Result;
 import com.bcpa.authentication.models.User;
-import com.bcpa.database.DbContext;
+import com.bcpa.authentication.repositories.IUserRepository;
 
 public final class AuthService implements IAuthService
 {
-    private final DbContext _db;
+    private final IUserRepository _userRepository;
     private final PasswordHasher _hasher;
 
-    public AuthService(DbContext db, PasswordHasher hasher) {
-        _db = db;
+    public AuthService(final PasswordHasher hasher, final IUserRepository userRepository) {
         _hasher = hasher;
+        _userRepository = userRepository;
     }
 
     @Override
-    public Result<User> LogInUser(String username, String password) 
+    public final Result<User> LogInUser(final String username, final String password) 
     {
         try 
         {
-            for (User user : _db.users) {
+            final List<User> users = _userRepository.getUsers().value;
+
+            for (final User user : users) {
                 if (!user.username.equals(username)) continue;
 
                 if (_hasher.check(password, user.password)) 

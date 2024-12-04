@@ -2,8 +2,8 @@ package com.bcpa.authentication.mappers;
 
 import com.bcpa.authentication.models.UserRole;
 
-public class UserRoleMapper {
-    public static String map(UserRole role) {
+public final class UserRoleMapper {
+    public final static String map(final UserRole role) {
         return switch (role) {
             case Customer     -> "Customer";
             case Agent        -> "Agent";

@@ -1,47 +1,48 @@
 package com.bcpa.app.views.Login;
-import com.bcpa.app.services.IIOReader;
 import com.bcpa.app.utils.Result;
 import com.bcpa.app.views.PageView;
-import com.bcpa.app.views.Home.HomeView;
+import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.models.User;
 import com.bcpa.authentication.services.IAuthService;
+import com.bcpa.event.services.IEventService;
 
-public final class LoginView extends PageView 
+public final class LoginView extends PageView
 {
     private final IViewManager _viewManager;
+    private final IEventService _eventService;
 
     private final IAuthService _auth;
 
-    public LoginView(IViewManager viewManager, IAuthService auth, IIOReader ioReader) 
+    public LoginView(final IViewManager viewManager, final IEventService eventService, final IAuthService auth) 
     {
         _viewManager = viewManager;
         _auth = auth;
-        _ioReader = ioReader;
+        _eventService = eventService;
     }
 
     @Override
-    public void show()
+    public final void show()
     {
         while (true) {
-            _ioReader.clear();
+            _viewManager.iioReader().clear();
 
             System.out.println("\n< == BCPA Ticket System == >");
             System.out.println("\n\tLog In");
 
             try 
             {
-                String username = _ioReader.read("\nUsername: ");
-                String password = _ioReader.read("Password: ");
+                final String username = _viewManager.iioReader().read("\nUsername: ");
+                final String password = _viewManager.iioReader().read("Password: ");
 
-                Result<User> result = _auth.LogInUser(username, password);
+                final Result<User> result = _auth.LogInUser(username, password);
                 
-                User user = result.value;
+                final User user = result.value;
                 if (user != null) {
-                    _ioReader.write("\nLogin Success. Loading home page...");
+                    _viewManager.iioReader().write("\nLogin Success. Loading home page...");
                     Thread.sleep(1500);
 
-                    _viewManager.setActiveView(new HomeView(_ioReader, user));
+                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, user));
                     break;
                 }
             }   

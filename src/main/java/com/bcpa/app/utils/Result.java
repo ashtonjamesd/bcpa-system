@@ -30,19 +30,19 @@ public final class Result<T>
      * The constructor is private so that the user of the class 
      * is forced to call the Ok and Err methods directly.
      */
-    private Result(T value, boolean isSuccess, String error) 
+    private Result(final T value, final boolean isSuccess, final String error) 
     {
         this.isSuccess = isSuccess;
         this.value = value;
         this.error = error;
     }
     
-    public static <T> Result<T> Ok(T t) 
+    public final static <T> Result<T> Ok(final T t) 
     {
         return new Result<T>(t, true, null);
     }
 
-    public static <T> Result<T> Err(String error) 
+    public final static <T> Result<T> Err(final String error) 
     {
         return new Result<T>(null, false, error);
     }
