@@ -36,8 +36,8 @@ public final class App
 
         final IAuthService authService = new AuthService(hasher, userRepository);
 
-        final IWidgetService widgetService = new WidgetService();
         final IIOReader inputReader = new IOReader();
+        final IWidgetService widgetService = new WidgetService(inputReader);
         final IViewManager viewManager = new ViewManager(widgetService, inputReader);
 
         final IEventRepository eventRepository = new EventRespository(db);

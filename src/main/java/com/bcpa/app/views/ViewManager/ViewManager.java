@@ -32,7 +32,7 @@ public final class ViewManager implements IViewManager
     }
 
     @Override
-    public final IIOReader iioReader() {
+    public final IIOReader ioReader() {
         return _ioReader;
     }
 }

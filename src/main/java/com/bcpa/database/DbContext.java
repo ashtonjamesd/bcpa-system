@@ -19,7 +19,14 @@ public final class DbContext
 {
     public DbContext() 
     {
-        
+        for (int i = 0; i < 10; i++) {
+            var event = new Event();
+            event.setEventName("Event " + i);
+            event.setCategory("Test");
+            event.setDescription("This is a new event");
+
+            events.add(event);
+        }
     }
 
     public final List<User> users = new ArrayList<>();

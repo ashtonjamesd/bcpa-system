@@ -9,5 +9,5 @@ public interface IViewManager {
     public PageView getActiveView();
 
     public IWidgetService widgetService();
-    public IIOReader iioReader();
+    public IIOReader ioReader();
 }

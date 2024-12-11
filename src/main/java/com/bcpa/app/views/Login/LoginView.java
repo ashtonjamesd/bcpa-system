@@ -25,21 +25,21 @@ public final class LoginView extends PageView
     public final void show()
     {
         while (true) {
-            _viewManager.iioReader().clear();
+            _viewManager.ioReader().clear();
 
             System.out.println("\n< == BCPA Ticket System == >");
             System.out.println("\n\tLog In");
 
             try 
             {
-                final String username = _viewManager.iioReader().read("\nUsername: ");
-                final String password = _viewManager.iioReader().read("Password: ");
+                final String username = _viewManager.ioReader().read("\nUsername: ");
+                final String password = _viewManager.ioReader().read("Password: ");
 
                 final Result<User> result = _auth.LogInUser(username, password);
                 
                 final User user = result.value;
                 if (user != null) {
-                    _viewManager.iioReader().write("\nLogin Success. Loading home page...");
+                    _viewManager.ioReader().write("\nLogin Success. Loading home page...");
                     Thread.sleep(1500);
 
                     _viewManager.setActiveView(new EventsView(_viewManager, _eventService, user));
