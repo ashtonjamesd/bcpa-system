@@ -8,8 +8,12 @@ import com.bcpa.app.services.display.WidgetService;
 import com.bcpa.app.services.io.IIOReader;
 import com.bcpa.app.services.io.IOReader;
 import com.bcpa.app.utils.AppMode;
+import com.bcpa.app.views.Home.HomeView;
+import com.bcpa.app.views.Login.LoginView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.app.views.ViewManager.ViewManager;
+import com.bcpa.authentication.factories.Customer.CustomerFactory;
+import com.bcpa.authentication.factories.Customer.ICustomerFactory;
 import com.bcpa.authentication.repositories.IUserRepository;
 import com.bcpa.authentication.repositories.UserRepository;
 import com.bcpa.authentication.services.AuthService;
@@ -50,6 +54,8 @@ public final class App
         container.register(DbContext.class, DbContext.class);
         container.register(PasswordHasher.class, PasswordHasher.class);
 
+        container.register(ICustomerFactory.class, CustomerFactory.class);
+
         container.register(IUserRepository.class, UserRepository.class);
         container.register(IEventRepository.class, EventRespository.class);
 
@@ -58,6 +64,9 @@ public final class App
         container.register(IWidgetService.class, WidgetService.class);
         container.register(IViewManager.class, ViewManager.class);
         container.register(IEventService.class, EventService.class);
+
+        container.register(LoginView.class, LoginView.class);
+        container.register(HomeView.class, HomeView.class);
 
         container.register(TicketSystem.class, TicketSystem.class);
 

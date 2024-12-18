@@ -17,9 +17,9 @@ public final class AuthService implements IAuthService
     }
 
     @Override
-    public final Result<User> LogInUser(final String username, final String password) 
+    public final Result<User> loginUser(final String username, final String password) 
     {
-        try 
+        try
         {
             final List<User> users = _userRepository.getUsers().value;
 
@@ -30,6 +30,27 @@ public final class AuthService implements IAuthService
                     return Result.Ok(user);
             }
     
+            return Result.Ok(null);
+        }
+        catch (Exception ex) 
+        {
+            return Result.Err(ex.getMessage());
+        }
+    }
+
+    @Override
+    public Result<User> registerUser(User newUser) {
+        try 
+        {
+            final List<User> users = _userRepository.getUsers().value;
+
+            for (final User user : users) {
+                if (user.username.equals(newUser.username)) {
+                    return Result.Err("User with that username already exists.");
+                }
+            }
+
+            _userRepository.createUser(newUser);
             return Result.Ok(null);
         }
         catch (Exception ex) 

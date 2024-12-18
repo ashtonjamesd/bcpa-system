@@ -40,4 +40,9 @@ public final class IOReader implements IIOReader {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+    @Override
+    public void readKey() {
+        read("");
+    }
 }

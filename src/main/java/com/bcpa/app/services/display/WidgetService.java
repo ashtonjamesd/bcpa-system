@@ -50,9 +50,11 @@ public final class WidgetService implements IWidgetService
             {
                 case "w":
                     if (pointer > 0) pointer--;
+                    else pointer = items.size() - 1;
                     break;
                 case "s":
                     if (pointer < options.size() - 1) pointer++;
+                    else pointer = 0;
                     break;
                 case "":
                     return items.get(pointer);
@@ -61,6 +63,53 @@ public final class WidgetService implements IWidgetService
             }
         }
     }
+
+    @Override
+    public final String menuOptions(final String header, final List<String> items) 
+    {
+        if (items.isEmpty()) return null;
+
+        int pointer = 0;
+        while (true) 
+        {
+            System.out.println("\033[H\033[2J");
+            System.out.flush();
+
+            System.out.println(header + "\n\n");
+
+            for (int i = 0; i < items.size(); i++) 
+            {
+                if (i == pointer) 
+                {
+                    System.out.println("-> " + items.get(i));
+                } else 
+                {
+                    System.out.println("   " + items.get(i));
+                }
+            }
+
+            System.out.println("\nUse W (up), S (down), and Enter (select): ");
+
+            String input = _inputReader.read("");
+
+            switch (input.toLowerCase()) 
+            {
+                case "w":
+                    if (pointer > 0) pointer--;
+                    else pointer = items.size() - 1;
+                    break;
+                case "s":
+                    if (pointer < items.size() - 1) pointer++;
+                    else pointer = 0;
+                    break;
+                case "":
+                    return items.get(pointer);
+                default:
+                    System.out.println("Invalid input. Use W, S, or Enter.");
+            }
+        }
+    }
+
 
     @Override
     public final boolean getChoice(final String message) 
