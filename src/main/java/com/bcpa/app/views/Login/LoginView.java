@@ -1,10 +1,14 @@
 package com.bcpa.app.views.Login;
+import com.bcpa.App;
 import com.bcpa.app.utils.Result;
 import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.models.User;
+import com.bcpa.authentication.models.VenueManager;
+import com.bcpa.authentication.repositories.UserRepository;
 import com.bcpa.authentication.services.IAuthService;
+import com.bcpa.database.DbContext;
 import com.bcpa.event.services.IEventService;
 
 public final class LoginView extends PageView
@@ -28,7 +32,9 @@ public final class LoginView extends PageView
             _viewManager.ioReader().clear();
 
             System.out.println("\n< == BCPA Ticket System == >");
-            System.out.println("\n\tLog In");
+
+            var db = App.container.resolve(DbContext.class);
+            System.out.println("\n\t Log In" + "(" + db.users.size() + ")");
 
             try 
             {
@@ -39,16 +45,20 @@ public final class LoginView extends PageView
                 
                 final User user = result.value;
                 if (user != null) {
-                    _viewManager.ioReader().write("\nLogin Success. Loading home page...");
-                    Thread.sleep(1500);
-
+                    _viewManager.widgetService().showLoadingIcon("\nLogin Success. Loading home page.");
                     _viewManager.setActiveView(new EventsView(_viewManager, _eventService, user));
                     break;
+                } 
+                else 
+                {
+                    _viewManager.ioReader().write("\nLogin Failed. Invalid Credentials.");
+                    _viewManager.ioReader().read("\nPress Enter to continue.");
                 }
             }   
-            catch (Exception ex) 
+            catch (final Exception ex)
             {
-
+                // punish user for causing an exception to be thrown
+                // Thread.sleep(9999 * (1000));
             }
         }
     }

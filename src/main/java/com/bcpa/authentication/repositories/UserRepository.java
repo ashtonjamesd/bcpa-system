@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bcpa.app.utils.Result;
 import com.bcpa.authentication.models.User;
+import com.bcpa.authentication.models.VenueManager;
 import com.bcpa.authentication.services.PasswordHasher;
 import com.bcpa.database.DbContext;
 
@@ -22,6 +23,7 @@ public final class UserRepository implements IUserRepository
     {
         try
         {
+            createUser(new VenueManager("admin", "admin"));
             return Result.Ok(_db.users);
         }
         catch (Exception ex)

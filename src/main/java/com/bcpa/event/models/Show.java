@@ -1,17 +1,16 @@
 package com.bcpa.event.models;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public final class Show {
-    private LocalDateTime dateTime;
+    private Date dateTime;
     private String venue;
     private int maxSeats;
 
-    public final LocalDateTime getDateTime() {
+    public final Date getDateTime() {
         return dateTime;
     }
 
-    public final void setDateTime(final LocalDateTime dateTime) {
+    public final void setDateTime(final Date dateTime) {
         this.dateTime = dateTime;
     }
 

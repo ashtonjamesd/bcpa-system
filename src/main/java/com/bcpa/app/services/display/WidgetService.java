@@ -1,4 +1,5 @@
 package com.bcpa.app.services.display;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -61,16 +62,20 @@ public final class WidgetService implements IWidgetService
     }
 
     @Override
-    public final boolean getChoice(final String message) {
-        while (true) {
+    public final boolean getChoice(final String message) 
+    {
+        while (true) 
+        {
             String choice = _inputReader.read(message + " (y/n): ").toLowerCase();
     
-            if (choice.isEmpty()) {
+            if (choice.isEmpty()) 
+            {
                 _inputReader.write("No input provided. Please enter 'y' or 'n'.");
                 continue;
             }
 
-            if (!choice.equals("y") && !choice.equals("n")) {
+            if (!choice.equals("y") && !choice.equals("n")) 
+            {
                 _inputReader.write("Invalid option '" + choice + "'. Please enter 'y' or 'n'.");
                 continue;
             }
@@ -86,6 +91,33 @@ public final class WidgetService implements IWidgetService
         {
             Thread.sleep(Long.MAX_VALUE);
         }
-        catch (Exception ex) { }
+        catch (Exception ex) 
+        { 
+
+        }
     }
+
+    @Override
+    public void showLoadingIcon(String message) 
+    {
+        try 
+        {
+            // final var symbols = Arrays.asList("|", "/", "-", "\\");
+            final var symbolsAlt = Arrays.asList(".", "o", "0", "O", "0", "o");
+            
+            System.out.println(message + "...");
+            for (int i = 0; i < 20; i++) {
+                System.out.print("\r" + symbolsAlt.get(i % symbolsAlt.size()));
+                Thread.sleep(100);
+            }
+            
+            System.out.print("\r");
+        } 
+        catch (final InterruptedException ex) 
+        {
+            Thread.currentThread().interrupt();
+            System.err.println("Loading interrupted: " + ex.getMessage());
+        }
+    }
+    
 }

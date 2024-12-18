@@ -1,8 +1,10 @@
 package com.bcpa.app;
+import com.bcpa.App;
 import com.bcpa.app.utils.AppMode;
 import com.bcpa.app.views.Login.LoginView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.services.IAuthService;
+import com.bcpa.database.DbContext;
 import com.bcpa.event.services.IEventService;
 
 public final class TicketSystem

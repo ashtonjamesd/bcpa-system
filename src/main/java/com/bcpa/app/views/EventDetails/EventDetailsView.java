@@ -29,11 +29,15 @@ public final class EventDetailsView extends PageView
             _viewManager.ioReader().write(_event.getCategory());
 
             final var shows = _event.getShows();
-            for (final Show show: shows) 
-            {
-                
-            } 
-            
+            if (shows != null) {
+                System.out.println("\nShows:\n");
+                for (final Show show: shows)
+                {
+                    System.out.println("\n  " + show.getVenue());
+                    System.out.println("    Date:     " + show.getDateTime());
+                    System.out.println("    Max Seats: " + show.getMaxSeats());
+                }
+            }
 
             _viewManager.widgetService().wait_();
         }
