@@ -29,15 +29,15 @@ public final class EventsView extends PageView
         {
             _viewManager.ioReader().clear();
 
-            _viewManager.ioReader().write(">- Upcoming Events -<");
-            _viewManager.ioReader().write(String.format("Currently logged in as: %s Role: %s", _user.username, UserRoleMapper.map(_user.role)));
+            final String currentlyLoggedInAs = String.format("\nCurrently logged in as: %s Role: %s", _user.username, UserRoleMapper.map(_user.role));
+            final String title = _viewManager.widgetService().toTitle("Upcoming Events");
 
-            final var result = _eventService.getAllEvents();
+            final var eventsResult = _eventService.getAllEvents();
 
             while (true)
             {
-                var selectedEvent = _viewManager.widgetService().menuOptions(result.value, Event::getEventName);
-                var isYes = _viewManager.widgetService().getChoice("Selected: " + selectedEvent.getEventName());
+                final var selectedEvent = _viewManager.widgetService().menuOptions(title + currentlyLoggedInAs, eventsResult.value, Event::getEventName);
+                final var isYes = _viewManager.widgetService().getChoice("Selected: " + selectedEvent.getEventName());
 
                 if (isYes)
                 {

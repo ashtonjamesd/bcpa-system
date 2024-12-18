@@ -16,7 +16,7 @@ public final class WidgetService implements IWidgetService
     }
 
     @Override
-    public final <T, R> T menuOptions(final List<T> items, final Function<T, R> mapper) 
+    public final <T, R> T menuOptions(final String header, final List<T> items, final Function<T, R> mapper) 
     {
         if (items.isEmpty()) return null;
 
@@ -24,11 +24,12 @@ public final class WidgetService implements IWidgetService
             .map(mapper).collect(Collectors.toList());
 
         int pointer = 0;
-
         while (true) 
         {
             System.out.println("\033[H\033[2J");
             System.out.flush();
+
+            System.out.println(header + "\n\n");
 
             for (int i = 0; i < options.size(); i++) 
             {
@@ -119,5 +120,9 @@ public final class WidgetService implements IWidgetService
             System.err.println("Loading interrupted: " + ex.getMessage());
         }
     }
-    
+
+    @Override
+    public String toTitle(String title) {
+        return " < == " + title + " == >";
+    }
 }

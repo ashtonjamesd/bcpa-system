@@ -31,10 +31,8 @@ public final class LoginView extends PageView
         while (true) {
             _viewManager.ioReader().clear();
 
-            System.out.println("\n< == BCPA Ticket System == >");
-
-            var db = App.container.resolve(DbContext.class);
-            System.out.println("\n\t Log In" + "(" + db.users.size() + ")");
+            final String title = _viewManager.widgetService().toTitle("BCPA Ticket System Login");
+            _viewManager.ioReader().write(title);
 
             try 
             {

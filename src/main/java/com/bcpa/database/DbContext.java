@@ -8,10 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import com.bcpa.App;
 import com.bcpa.authentication.models.User;
-import com.bcpa.authentication.models.VenueManager;
-import com.bcpa.authentication.repositories.UserRepository;
 import com.bcpa.event.models.Event;
 import com.bcpa.event.models.Show;
 
@@ -28,14 +25,17 @@ public final class DbContext implements IDbContext
     public DbContext() 
     {
         final var rnd = new Random();
+        
+        final int eventsToSeed = 5;
+        final int showsToSeed = 3;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < eventsToSeed; i++) {
             final var event = new Event();
             event.setEventName("Event " + i);
             event.setCategory("Test");
             event.setDescription("This is a new event");
 
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < showsToSeed; j++) {
                 final var show = new Show();
                 show.setMaxSeats(rnd.nextInt(50));
                 show.setVenue("Example Venue " + j + 1);

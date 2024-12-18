@@ -1,4 +1,4 @@
-package com.bcpa.registry;
+package com.bcpa.app.registry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
@@ -6,6 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ServiceContainer implements IServiceContainer {
+    private static ServiceContainer instance;
+    
+    private ServiceContainer() {}
+
+    public static synchronized ServiceContainer instance() {
+        if (instance == null) {
+            instance = new ServiceContainer();
+        }
+        return instance;
+    }
+
     private final Map<Type, Type> registry = new HashMap<>();
 
     /**

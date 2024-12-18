@@ -1,5 +1,8 @@
 package com.bcpa.app.views.EventDetails;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.event.models.Event;
@@ -23,23 +26,30 @@ public final class EventDetailsView extends PageView
         {
             _viewManager.ioReader().clear();
 
-            _viewManager.ioReader().write(">- Event Details -<\n");
-            _viewManager.ioReader().write(_event.getEventName());
-            _viewManager.ioReader().write(_event.getDescription());
-            _viewManager.ioReader().write(_event.getCategory());
+            final String title = _viewManager.widgetService().toTitle("Event Details");
+            _viewManager.ioReader().write(title + "\n");
+
+            _viewManager.ioReader().write("Title:       " + _event.getEventName());
+            _viewManager.ioReader().write("Description: " + _event.getDescription());
+            _viewManager.ioReader().write("Category:    " + _event.getCategory());
 
             final var shows = _event.getShows();
-            if (shows != null) {
-                System.out.println("\nShows:\n");
+            if (shows != null) 
+            {
+                System.out.println("\nShows " + "(" + shows.size() + "):");
                 for (final Show show: shows)
                 {
-                    System.out.println("\n  " + show.getVenue());
-                    System.out.println("    Date:     " + show.getDateTime());
+                    System.out.println("\n  " + show.getVenue() + " | " + FormatShowDate(show.getDateTime()));
                     System.out.println("    Max Seats: " + show.getMaxSeats());
                 }
             }
 
             _viewManager.widgetService().wait_();
         }
+    }
+
+    private String FormatShowDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm");
+        return sdf.format(date);
     }
 }
