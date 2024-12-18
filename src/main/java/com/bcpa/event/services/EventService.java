@@ -6,7 +6,7 @@ import com.bcpa.app.utils.Result;
 import com.bcpa.event.models.Event;
 import com.bcpa.event.repositories.IEventRepository;
 
-public class EventService implements IEventService 
+public final class EventService implements IEventService 
 {
     private final IEventRepository _eventRepository;
 

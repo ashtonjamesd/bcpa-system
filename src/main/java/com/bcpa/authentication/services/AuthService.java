@@ -11,7 +11,8 @@ public final class AuthService implements IAuthService
     private final IUserRepository _userRepository;
     private final PasswordHasher _hasher;
 
-    public AuthService(final PasswordHasher hasher, final IUserRepository userRepository) {
+    public AuthService(final PasswordHasher hasher, final IUserRepository userRepository) 
+    {
         _hasher = hasher;
         _userRepository = userRepository;
     }
@@ -23,7 +24,8 @@ public final class AuthService implements IAuthService
         {
             final List<User> users = _userRepository.getUsers().value;
 
-            for (final User user : users) {
+            for (final User user : users) 
+            {
                 if (!user.username.equals(username)) continue;
 
                 if (_hasher.check(password, user.password)) 
@@ -39,19 +41,22 @@ public final class AuthService implements IAuthService
     }
 
     @Override
-    public Result<User> registerUser(User newUser) {
+    public Result<User> registerUser(User newUser) 
+    {
         try 
         {
             final List<User> users = _userRepository.getUsers().value;
 
-            for (final User user : users) {
-                if (user.username.equals(newUser.username)) {
+            for (final User user : users) 
+            {
+                if (user.username.equals(newUser.username)) 
+                {
                     return Result.Err("User with that username already exists.");
                 }
             }
 
-            _userRepository.createUser(newUser);
-            return Result.Ok(null);
+            final var result = _userRepository.createUser(newUser);
+            return Result.Ok(result.isSuccess ? newUser : null);
         }
         catch (Exception ex) 
         {

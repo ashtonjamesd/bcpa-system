@@ -5,6 +5,6 @@ import com.bcpa.authentication.models.User;
 
 public interface IAuthService
 {
-    public Result<User> loginUser(String username, String password);
-    public Result<User> registerUser(User user);
+    public Result<User> loginUser(final String username, final String password);
+    public Result<User> registerUser(final User user);
 }

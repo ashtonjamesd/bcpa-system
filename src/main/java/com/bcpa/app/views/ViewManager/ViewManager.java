@@ -12,12 +12,12 @@ public final class ViewManager implements IViewManager {
     private final IIOReader _ioReader;
     private PageView activeView;
 
-    public ViewManager(IWidgetService widgetService, IIOReader ioReader) {
+    public ViewManager(final IWidgetService widgetService, final IIOReader ioReader) {
         _widgetService = widgetService;
         _ioReader = ioReader;
     }
 
-    public static ViewManager get() {
+    public final static ViewManager get() {
         if (_instance == null) {
             synchronized (ViewManager.class) {
                 if (_instance == null) {
@@ -28,6 +28,7 @@ public final class ViewManager implements IViewManager {
                 }
             }
         }
+
         return _instance;
     }
 
@@ -52,7 +53,7 @@ public final class ViewManager implements IViewManager {
     }
 
     @Override
-    public void setActiveView(Class<? extends PageView> viewClass) {
+    public final void setActiveView(final Class<? extends PageView> viewClass) {
         setActiveView(App.container.resolve(viewClass));
     }
 }

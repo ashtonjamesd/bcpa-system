@@ -5,7 +5,7 @@ import com.bcpa.authentication.models.Customer;
 public final class CustomerFactory implements ICustomerFactory {
 
     @Override
-    public Customer create(String username, String password, String address) {
+    public final Customer create(final String username, final String password, final String address) {
         return new Customer(
             username,
             password,

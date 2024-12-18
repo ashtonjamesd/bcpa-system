@@ -13,7 +13,7 @@ public final class EventDetailsView extends PageView
     private final IViewManager _viewManager;
     private final Event _event;
 
-    public EventDetailsView(IViewManager viewManager, Event event) 
+    public EventDetailsView(final IViewManager viewManager, final Event event) 
     {
         _viewManager = viewManager;
         _event = event;

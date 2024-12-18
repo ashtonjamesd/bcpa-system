@@ -40,13 +40,15 @@ public final class HomeView extends PageView
 
             if (option == "Exit") break;
             
-            PageView page = switch (option) {
+            PageView page = switch (option) 
+            {
                 case "Login"    -> new LoginView(_viewManager, _eventService, _authService, _customerFactory);
                 case "Register" -> new RegisterView(_viewManager, _customerFactory, _authService, _eventService);
                 default -> null;
             };
 
-            if (page != null) {
+            if (page != null) 
+            {
                 _viewManager.setActiveView(page);
                 break;
             }

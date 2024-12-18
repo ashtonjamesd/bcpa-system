@@ -23,7 +23,7 @@ public final class UserRepository implements IUserRepository
     {
         try
         {
-            createUser(new VenueManager("admin", "admin"));
+            createUser(new VenueManager("admin", "admin")); // remove this later
             return Result.Ok(_db.users);
         }
         catch (Exception ex)
@@ -37,17 +37,6 @@ public final class UserRepository implements IUserRepository
     {
         try
         {
-            boolean userExists = false;
-            for (final User user : _db.users) {
-                if (!user.username.equals(newUser.username)) continue;
-
-                userExists = true;
-                break;
-            }
-
-            if (userExists) 
-                return Result.Err("User with that username already exists.");
-
             newUser.password = _hasher.hash(newUser.password);
             _db.users.add(newUser);
 

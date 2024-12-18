@@ -48,7 +48,8 @@ public final class App
 
     /// i decided to create my own autowiring service injection container as it is just cool to do
     /// and the existing ones for Java are a bit naff
-    private static void registerDependencies() {
+    private static void registerDependencies() 
+    {
         if (isRegistered) return;
 
         container.register(DbContext.class, DbContext.class);
@@ -65,8 +66,8 @@ public final class App
         container.register(IViewManager.class, ViewManager.class);
         container.register(IEventService.class, EventService.class);
 
-        container.register(LoginView.class, LoginView.class);
-        container.register(HomeView.class, HomeView.class);
+        // container.register(LoginView.class, LoginView.class);
+        // container.register(HomeView.class, HomeView.class);
 
         container.register(TicketSystem.class, TicketSystem.class);
 

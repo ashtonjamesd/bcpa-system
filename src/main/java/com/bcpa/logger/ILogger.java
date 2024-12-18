@@ -1,6 +1,7 @@
 package com.bcpa.logger;
 
-public interface ILogger {
-    public void LogInfo(String message);
-    public void LogError(String message);
+public interface ILogger 
+{
+    public void LogInfo(final String message);
+    public void LogError(final String message);
 }

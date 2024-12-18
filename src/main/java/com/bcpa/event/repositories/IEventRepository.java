@@ -6,6 +6,6 @@ import com.bcpa.app.utils.Result;
 import com.bcpa.event.models.Event;
 
 public interface IEventRepository {
-    public Result<Boolean> addEvent(Event event);
+    public Result<Boolean> addEvent(final Event event);
     public Result<List<Event>> getEvents();
 }

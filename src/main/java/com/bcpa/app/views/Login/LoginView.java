@@ -29,7 +29,8 @@ public final class LoginView extends PageView
     @Override
     public final void show()
     {
-        while (true) {
+        while (true) 
+        {
             _viewManager.ioReader().clear();
 
             final String title = _viewManager.widgetService().toTitle("BCPA Ticket System Login");
