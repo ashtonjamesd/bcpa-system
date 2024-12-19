@@ -8,8 +8,13 @@ import com.bcpa.app.services.display.WidgetService;
 import com.bcpa.app.services.io.IIOReader;
 import com.bcpa.app.services.io.IOReader;
 import com.bcpa.app.utils.AppMode;
+import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.EventDetailsViewFactory;
+import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.IEventDetailsViewFactory;
+import com.bcpa.app.views.Events.EventsViewFactory.EventsViewFactory;
+import com.bcpa.app.views.Events.EventsViewFactory.IEventsViewFactory;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.Login.LoginView;
+import com.bcpa.app.views.Login.LoginViewController;
 import com.bcpa.app.views.Register.RegisterView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.app.views.ViewManager.ViewManager;
@@ -48,9 +53,9 @@ public final class App
         app.setMode(AppMode.Debug);
         app.run();
 
-        // l: 2040, finally..
-        // c: 43
-        
+        // l: 2220, h and p..
+        // c: 43...
+
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do
@@ -59,24 +64,32 @@ public final class App
     {
         if (isRegistered) return;
 
+        // other services
         container.register(DbContext.class, DbContext.class);
         container.register(PasswordHasher.class, PasswordHasher.class);
 
+        // factories
         container.register(ICustomerFactory.class, CustomerFactory.class);
         container.register(IEventFactory.class, EventFactory.class);
 
+        // repositories
         container.register(IUserRepository.class, UserRepository.class);
         container.register(IEventRepository.class, EventRespository.class);
 
+       // services 
         container.register(IAuthService.class, AuthService.class);
         container.register(IIOReader.class, IOReader.class);
         container.register(IWidgetService.class, WidgetService.class);
         container.register(IViewManager.class, ViewManager.class);
         container.register(IEventService.class, EventService.class);
 
+        // views
         container.register(HomeView.class, HomeView.class);
         container.register(LoginView.class, LoginView.class);
         container.register(RegisterView.class, RegisterView.class);
+
+        // controllers
+        container.register(LoginViewController.class, LoginViewController.class);
 
         container.register(TicketSystem.class, TicketSystem.class);
 

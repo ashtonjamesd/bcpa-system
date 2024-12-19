@@ -104,7 +104,7 @@ public final class ProfileView extends PageView
 
     private final String getVenueManagerDetails() {
         final String username = "Username: " + _user.username;
-        final String role = "\nRole: " + UserRoleMapper.map(_user.role);
+        final String role = "\nRole:       " + UserRoleMapper.map(_user.role);
         
         return username + role;
     }

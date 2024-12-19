@@ -1,29 +1,17 @@
 package com.bcpa.app.views.Login;
 
-import com.bcpa.app.utils.Result;
 import com.bcpa.app.views.PageView;
-import com.bcpa.app.views.Events.EventsView;
-import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
-import com.bcpa.authentication.models.User;
-import com.bcpa.authentication.services.IAuthService;
-import com.bcpa.event.factories.IEventFactory;
-import com.bcpa.event.services.IEventService;
 
 public final class LoginView extends PageView
 {
+    private final LoginViewController _controller;
     private final IViewManager _viewManager;
-    private final IEventService _eventService;
-    private final IEventFactory _eventFactory;
 
-    private final IAuthService _authService;
-
-    public LoginView(final IViewManager viewManager, final IEventService eventService, final IAuthService auth, final IEventFactory eventFactory) 
+    public LoginView(final IViewManager viewManager, final LoginViewController controller) 
     {
+        _controller = controller;
         _viewManager = viewManager;
-        _authService = auth;
-        _eventService = eventService;
-        _eventFactory = eventFactory;
     }
 
     @Override
@@ -41,21 +29,8 @@ public final class LoginView extends PageView
                 final String username = _viewManager.ioReader().read("\n  Username: ");
                 final String password = _viewManager.ioReader().read("  Password: ");
 
-                final Result<User> result = _authService.loginUser(username, password);
-                
-                final User user = result.value;
-                if (user != null) {
-                    _viewManager.widgetService().showLoadingIcon("\nLogin Success. Loading home page.");
-                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, _authService, result.value));
-                    break;
-                } 
-                else 
-                {
-                    _viewManager.ioReader().write("\nLogin Failed. Invalid Credentials.");
-                    _viewManager.ioReader().read("\nPress Enter to continue.");
-                    _viewManager.setActiveView(HomeView.class);
-                    break;
-                }
+                _controller.tryLogin(username, password);
+                break;
             }   
             catch (final Exception ex)
             {

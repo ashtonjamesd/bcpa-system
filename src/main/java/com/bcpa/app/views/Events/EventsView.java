@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.EventDetails.EventDetailsView;
+import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.IEventDetailsViewFactory;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.Profile.ProfileView;
 import com.bcpa.app.views.ViewManager.IViewManager;
@@ -19,18 +20,18 @@ public final class EventsView extends PageView
     private final IViewManager _viewManager;
 
     private final IEventService _eventService;
-    private final IEventFactory _eventFactory;
     private final IAuthService _authService;
+    private final IEventFactory _eventFactory;
 
     private final User _user;
 
-    public EventsView(final IViewManager viewManager, final IEventService eventService, final IEventFactory eventFactory, final IAuthService authService, final User user)
+    public EventsView(final IViewManager viewManager, final IEventService eventService, final IAuthService authService, final User user, final IEventFactory eventFactory)
     {
         _viewManager = viewManager;
         _eventService = eventService;
-        _eventFactory = eventFactory;
         _authService = authService;
         _user = user;
+        _eventFactory = eventFactory;
     }
 
     @Override

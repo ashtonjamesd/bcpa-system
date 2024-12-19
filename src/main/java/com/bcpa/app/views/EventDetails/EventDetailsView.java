@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.bcpa.app.views.PageView;
+import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.IEventDetailsViewFactory;
 import com.bcpa.app.views.Events.EventsView;
+import com.bcpa.app.views.Events.EventsViewFactory.IEventsViewFactory;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.models.User;
 import com.bcpa.authentication.services.IAuthService;
@@ -42,7 +44,7 @@ public final class EventDetailsView extends PageView
         {
             if (isBackRequested) 
             {
-                _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, _authService, _user));
+                _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _authService, _user, _eventFactory));
                 break;
             }
 
@@ -77,11 +79,15 @@ public final class EventDetailsView extends PageView
                 final var options = List.of("Book Show", "Search", "Back");
                 final var option = _viewManager.widgetService().menuOptions(eventStr + showStr, options);
 
-                if (option.equals("Book Show")) {
+                if (option.equals("Book Show")) 
+                {
 
-                } else if (option.equals("Search")) {
+                } else if (option.equals("Search")) 
+                {
 
-                } else if (option.equals("Back")) {
+                } 
+                else if (option.equals("Back")) 
+                {
                     isBackRequested = true;
                     break;
                 }
