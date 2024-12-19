@@ -48,7 +48,9 @@ public final class App
         app.setMode(AppMode.Debug);
         app.run();
 
-        // note: 1909, cleanup
+        // l: 2040, finally..
+        // c: 43
+        
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do

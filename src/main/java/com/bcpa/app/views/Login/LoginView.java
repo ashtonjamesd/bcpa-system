@@ -16,12 +16,12 @@ public final class LoginView extends PageView
     private final IEventService _eventService;
     private final IEventFactory _eventFactory;
 
-    private final IAuthService _auth;
+    private final IAuthService _authService;
 
     public LoginView(final IViewManager viewManager, final IEventService eventService, final IAuthService auth, final IEventFactory eventFactory) 
     {
         _viewManager = viewManager;
-        _auth = auth;
+        _authService = auth;
         _eventService = eventService;
         _eventFactory = eventFactory;
     }
@@ -41,12 +41,12 @@ public final class LoginView extends PageView
                 final String username = _viewManager.ioReader().read("\n  Username: ");
                 final String password = _viewManager.ioReader().read("  Password: ");
 
-                final Result<User> result = _auth.loginUser(username, password);
+                final Result<User> result = _authService.loginUser(username, password);
                 
                 final User user = result.value;
                 if (user != null) {
                     _viewManager.widgetService().showLoadingIcon("\nLogin Success. Loading home page.");
-                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, user));
+                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, _authService, result.value));
                     break;
                 } 
                 else 

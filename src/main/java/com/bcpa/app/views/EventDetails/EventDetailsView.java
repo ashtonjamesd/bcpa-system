@@ -8,6 +8,7 @@ import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.models.User;
+import com.bcpa.authentication.services.IAuthService;
 import com.bcpa.event.factories.IEventFactory;
 import com.bcpa.event.models.Event;
 import com.bcpa.event.models.Show;
@@ -18,6 +19,7 @@ public final class EventDetailsView extends PageView
     private final IViewManager _viewManager;
     private IEventService _eventService;
     private IEventFactory _eventFactory;
+    private IAuthService _authService;
 
     private final User _user;
     private final Event _event;
@@ -40,7 +42,7 @@ public final class EventDetailsView extends PageView
         {
             if (isBackRequested) 
             {
-                _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, _user));
+                _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, _authService, _user));
                 break;
             }
 

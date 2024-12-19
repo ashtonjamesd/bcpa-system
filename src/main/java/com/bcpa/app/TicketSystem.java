@@ -34,7 +34,11 @@ public final class TicketSystem
 
         while (true)
         {
-            if (isExitRequested) break;
+            if (isExitRequested) {
+                _viewManager.ioReader().write("Thank you for using the BCPA Ticket System.");
+                break;
+            }
+
             _viewManager.getActiveView().show();
         }
     }
