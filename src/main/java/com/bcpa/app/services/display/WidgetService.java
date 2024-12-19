@@ -158,7 +158,7 @@ public final class WidgetService implements IWidgetService
             System.out.println(message + "...");
             for (int i = 0; i < 20; i++) {
                 System.out.print("\r" + symbolsAlt.get(i % symbolsAlt.size()));
-                Thread.sleep(100);
+                Thread.sleep(10);
             }
             
             System.out.print("\r");

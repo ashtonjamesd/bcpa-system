@@ -1,29 +1,24 @@
 package com.bcpa.app;
 
+import com.bcpa.App;
 import com.bcpa.app.utils.AppMode;
+import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
-import com.bcpa.authentication.factories.Customer.ICustomerFactory;
-import com.bcpa.authentication.services.IAuthService;
-import com.bcpa.event.services.IEventService;
 
 public final class TicketSystem
 {
+    // this has to be global to ensure the integrity of the view structure between page instances
+    public static PageView GlobalActivePage = null;
+
     private final IViewManager _viewManager;
-    private final IEventService _eventService;
-    private final IAuthService _authService;
-    private final ICustomerFactory _customerFactory;
-    
 
     private AppMode _mode;
-    private boolean isExitRequested = false;
+    public static boolean isExitRequested = false;
 
-    public TicketSystem(final IViewManager viewManager, final IEventService eventService, final IAuthService authService, final ICustomerFactory customerFactory)
+    public TicketSystem(final IViewManager viewManager)
     {
         _viewManager = viewManager;
-        _eventService = eventService;
-        _authService = authService;
-        _customerFactory = customerFactory;
     }
 
     public final void run()
@@ -35,13 +30,11 @@ public final class TicketSystem
         }
 
         // The initial active page for the application is the home page.
-        _viewManager.setActiveView(new HomeView(_viewManager, _eventService, _authService, _customerFactory));
+        _viewManager.setActiveView(App.container.resolve(HomeView.class));
 
         while (true)
         {
             if (isExitRequested) break;
-            // System.out.println(_viewManager.getActiveView());
-            // _viewManager.widgetService().wait_();
             _viewManager.getActiveView().show();
         }
     }

@@ -10,6 +10,13 @@ public final class Event
     private String category;
     private List<Show> shows = new ArrayList<Show>();
 
+    public Event(final String name, final String description, final String category) 
+    {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
     public final void addShow(Show show) 
     {
         shows.add(show);

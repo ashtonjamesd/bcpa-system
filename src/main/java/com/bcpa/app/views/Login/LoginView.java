@@ -5,25 +5,25 @@ import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
-import com.bcpa.authentication.factories.Customer.ICustomerFactory;
 import com.bcpa.authentication.models.User;
 import com.bcpa.authentication.services.IAuthService;
+import com.bcpa.event.factories.IEventFactory;
 import com.bcpa.event.services.IEventService;
 
 public final class LoginView extends PageView
 {
     private final IViewManager _viewManager;
     private final IEventService _eventService;
-    private final ICustomerFactory _customerFactory;
+    private final IEventFactory _eventFactory;
 
     private final IAuthService _auth;
 
-    public LoginView(final IViewManager viewManager, final IEventService eventService, final IAuthService auth, final ICustomerFactory customerFactory) 
+    public LoginView(final IViewManager viewManager, final IEventService eventService, final IAuthService auth, final IEventFactory eventFactory) 
     {
         _viewManager = viewManager;
         _auth = auth;
         _eventService = eventService;
-        _customerFactory = customerFactory;
+        _eventFactory = eventFactory;
     }
 
     @Override
@@ -46,14 +46,14 @@ public final class LoginView extends PageView
                 final User user = result.value;
                 if (user != null) {
                     _viewManager.widgetService().showLoadingIcon("\nLogin Success. Loading home page.");
-                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, user));
+                    _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _eventFactory, user));
                     break;
                 } 
                 else 
                 {
                     _viewManager.ioReader().write("\nLogin Failed. Invalid Credentials.");
                     _viewManager.ioReader().read("\nPress Enter to continue.");
-                    _viewManager.setActiveView(new HomeView(_viewManager, _eventService, _auth, _customerFactory));
+                    _viewManager.setActiveView(HomeView.class);
                     break;
                 }
             }   

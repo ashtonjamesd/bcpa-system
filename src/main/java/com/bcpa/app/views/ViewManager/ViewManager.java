@@ -1,16 +1,16 @@
 package com.bcpa.app.views.ViewManager;
 
 import com.bcpa.App;
+import com.bcpa.app.TicketSystem;
 import com.bcpa.app.services.display.IWidgetService;
 import com.bcpa.app.services.io.IIOReader;
 import com.bcpa.app.views.PageView;
 
 public final class ViewManager implements IViewManager {
     private static volatile ViewManager _instance;
-    
+
     private final IWidgetService _widgetService;
     private final IIOReader _ioReader;
-    private PageView activeView;
 
     public ViewManager(final IWidgetService widgetService, final IIOReader ioReader) {
         _widgetService = widgetService;
@@ -34,12 +34,12 @@ public final class ViewManager implements IViewManager {
 
     @Override
     public final void setActiveView(final PageView view) {
-        activeView = view;
+        TicketSystem.GlobalActivePage = view;
     }
 
     @Override
     public final PageView getActiveView() {
-        return activeView;
+        return TicketSystem.GlobalActivePage;
     }
 
     @Override
@@ -54,6 +54,6 @@ public final class ViewManager implements IViewManager {
 
     @Override
     public final void setActiveView(final Class<? extends PageView> viewClass) {
-        setActiveView(App.container.resolve(viewClass));
+        TicketSystem.GlobalActivePage = App.container.resolve(viewClass);
     }
 }

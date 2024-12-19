@@ -1,6 +1,5 @@
 package com.bcpa.app.views.Register;
 
-import com.bcpa.App;
 import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.Login.LoginView;
@@ -8,22 +7,19 @@ import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.factories.Customer.ICustomerFactory;
 import com.bcpa.authentication.models.Customer;
 import com.bcpa.authentication.services.IAuthService;
-import com.bcpa.event.services.IEventService;
 
 public final class RegisterView extends PageView
 {
     private final IViewManager _viewManager;
     private final ICustomerFactory _customerFactory;
-    private final IEventService _eventService;
 
     private final IAuthService _auth;
 
-    public RegisterView(final IViewManager viewManager, final ICustomerFactory customerFactory, final IAuthService auth, final IEventService eventService) 
+    public RegisterView(final IViewManager viewManager, final ICustomerFactory customerFactory, final IAuthService auth) 
     {
         _viewManager = viewManager;
         _auth = auth;
         _customerFactory = customerFactory;
-        _eventService = eventService;
     }
 
     @Override
@@ -48,14 +44,14 @@ public final class RegisterView extends PageView
             if (result.isSuccess) 
             {
                 _viewManager.widgetService().showLoadingIcon("\nUser successfully created, navigating to login page");
-                _viewManager.setActiveView(new LoginView(_viewManager, _eventService, _auth, _customerFactory));
+                _viewManager.setActiveView(LoginView.class);
                 break;
             }
             else
             {
                 _viewManager.ioReader().write("\nUnable to create user: " + result.error);
                 _viewManager.ioReader().readKey();
-                _viewManager.setActiveView(App.container.resolve(HomeView.class));
+                _viewManager.setActiveView(HomeView.class);
                 break;
             }
         }

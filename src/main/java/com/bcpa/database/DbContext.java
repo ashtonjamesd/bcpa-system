@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.bcpa.authentication.models.User;
+import com.bcpa.authentication.models.VenueManager;
+import com.bcpa.authentication.repositories.UserRepository;
+import com.bcpa.authentication.services.PasswordHasher;
 import com.bcpa.event.models.Event;
 import com.bcpa.event.models.Show;
 
@@ -27,7 +30,7 @@ public final class DbContext implements IDbContext
         final int showsToSeed = 3;
 
         for (int i = 0; i < eventsToSeed; i++) {
-            final var event = new Event();
+            final var event = new Event(null, null, null);
             event.setEventName("Event " + i);
             event.setCategory("Test");
             event.setDescription("This is a new event");
@@ -40,6 +43,9 @@ public final class DbContext implements IDbContext
                 show.setDateTime(new Date());
                 event.addShow(show);
             }
+
+            UserRepository repo = new UserRepository(this, new PasswordHasher());
+            repo.createUser(new VenueManager("admin", "admin"));
             
             events.add(event);
         }

@@ -10,6 +10,7 @@ import com.bcpa.app.services.io.IOReader;
 import com.bcpa.app.utils.AppMode;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.Login.LoginView;
+import com.bcpa.app.views.Register.RegisterView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.app.views.ViewManager.ViewManager;
 import com.bcpa.authentication.factories.Customer.CustomerFactory;
@@ -20,6 +21,8 @@ import com.bcpa.authentication.services.AuthService;
 import com.bcpa.authentication.services.IAuthService;
 import com.bcpa.authentication.services.PasswordHasher;
 import com.bcpa.database.DbContext;
+import com.bcpa.event.factories.EventFactory;
+import com.bcpa.event.factories.IEventFactory;
 import com.bcpa.event.repositories.EventRespository;
 import com.bcpa.event.repositories.IEventRepository;
 import com.bcpa.event.services.EventService;
@@ -44,6 +47,8 @@ public final class App
 
         app.setMode(AppMode.Debug);
         app.run();
+
+        // note: 1909, cleanup
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do
@@ -56,6 +61,7 @@ public final class App
         container.register(PasswordHasher.class, PasswordHasher.class);
 
         container.register(ICustomerFactory.class, CustomerFactory.class);
+        container.register(IEventFactory.class, EventFactory.class);
 
         container.register(IUserRepository.class, UserRepository.class);
         container.register(IEventRepository.class, EventRespository.class);
@@ -66,8 +72,9 @@ public final class App
         container.register(IViewManager.class, ViewManager.class);
         container.register(IEventService.class, EventService.class);
 
-        // container.register(LoginView.class, LoginView.class);
-        // container.register(HomeView.class, HomeView.class);
+        container.register(HomeView.class, HomeView.class);
+        container.register(LoginView.class, LoginView.class);
+        container.register(RegisterView.class, RegisterView.class);
 
         container.register(TicketSystem.class, TicketSystem.class);
 
