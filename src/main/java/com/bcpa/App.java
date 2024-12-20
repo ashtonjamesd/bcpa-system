@@ -52,7 +52,7 @@ public final class App
         app.setMode(AppMode.Debug);
         app.run();
 
-        // l: 2400, vf nbu | c: 43...
+        // l: 2200, vf nbu | c: 54...
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do

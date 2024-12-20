@@ -9,7 +9,9 @@ import com.bcpa.authentication.models.User;
 import com.bcpa.authentication.models.VenueManager;
 import com.bcpa.authentication.repositories.UserRepository;
 import com.bcpa.authentication.services.PasswordHasher;
+import com.bcpa.event.enums.SeatStatus;
 import com.bcpa.event.models.Event;
+import com.bcpa.event.models.Seat;
 import com.bcpa.event.models.Show;
 
 /**
@@ -42,6 +44,21 @@ public final class DbContext implements IDbContext
 
                 show.setDateTime(new Date());
                 event.addShow(show);
+
+                for (int row = 0; row < rnd.nextInt(7, 14); row++) {
+                    for (int col = 0; col < rnd.nextInt(10, 22); col++) {
+                        String position = String.format("%c%d", 'A' + row, col + 1);
+
+                        final int seatStatusIdx = rnd.nextInt(4);
+
+                        SeatStatus status = SeatStatus.Open;
+                        if (seatStatusIdx == 0) status = SeatStatus.Held;
+                        if (seatStatusIdx == 1) status = SeatStatus.Booked;
+                        if (seatStatusIdx == 2) status = SeatStatus.Open;
+
+                        show.getSeats().add(new Seat(position, row, col, status));
+                    }
+                }
             }
 
             UserRepository repo = new UserRepository(this, new PasswordHasher());
