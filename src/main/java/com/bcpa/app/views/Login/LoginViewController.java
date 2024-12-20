@@ -1,28 +1,24 @@
 package com.bcpa.app.views.Login;
 
+import com.bcpa.App;
 import com.bcpa.app.utils.Result;
+import com.bcpa.app.views.Events.EventViewController;
 import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.models.User;
 import com.bcpa.authentication.services.IAuthService;
-import com.bcpa.event.factories.IEventFactory;
-import com.bcpa.event.services.IEventService;
 
 public final class LoginViewController 
 {
     private final IViewManager _viewManager;
     private final IAuthService _authService;
 
-    private final IEventService _eventService;
-    private final IEventFactory _eventFactory;
 
-    public LoginViewController(final IViewManager viewManager, final IAuthService authService, final IEventService eventService, final IEventFactory eventFactory)
+    public LoginViewController(final IViewManager viewManager, final IAuthService authService)
     {
         _viewManager = viewManager;
         _authService = authService;
-        _eventService = eventService;
-        _eventFactory = eventFactory;
     }
 
     public final boolean tryLogin(String username, String password) 
@@ -32,7 +28,7 @@ public final class LoginViewController
         final User user = result.value;
         if (user != null) {
             _viewManager.widgetService().showLoadingIcon("\nLogin Success. Loading home page.");
-            _viewManager.setActiveView(new EventsView(_viewManager, _eventService, _authService, user, _eventFactory));
+            _viewManager.setActiveView(new EventsView(App.container.resolve(EventViewController.class), user));
             return true;
         } 
         else 

@@ -8,13 +8,12 @@ import com.bcpa.app.services.display.WidgetService;
 import com.bcpa.app.services.io.IIOReader;
 import com.bcpa.app.services.io.IOReader;
 import com.bcpa.app.utils.AppMode;
-import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.EventDetailsViewFactory;
-import com.bcpa.app.views.EventDetails.EventDetailsViewFactory.IEventDetailsViewFactory;
-import com.bcpa.app.views.Events.EventsViewFactory.EventsViewFactory;
-import com.bcpa.app.views.Events.EventsViewFactory.IEventsViewFactory;
+import com.bcpa.app.views.EventDetails.EventDetailsViewController;
+import com.bcpa.app.views.Events.EventViewController;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.Login.LoginView;
 import com.bcpa.app.views.Login.LoginViewController;
+import com.bcpa.app.views.Profile.ProfileViewController;
 import com.bcpa.app.views.Register.RegisterView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.app.views.ViewManager.ViewManager;
@@ -49,13 +48,11 @@ public final class App
         registerDependencies();
 
         final TicketSystem app = container.resolve(TicketSystem.class);
-
+        
         app.setMode(AppMode.Debug);
         app.run();
 
-        // l: 2220, h and p..
-        // c: 43...
-
+        // l: 2400, vf nbu | c: 43...
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do
@@ -90,6 +87,9 @@ public final class App
 
         // controllers
         container.register(LoginViewController.class, LoginViewController.class);
+        container.register(EventDetailsViewController.class, EventDetailsViewController.class);
+        container.register(EventViewController.class, EventViewController.class);
+        container.register(ProfileViewController.class, ProfileViewController.class);
 
         container.register(TicketSystem.class, TicketSystem.class);
 

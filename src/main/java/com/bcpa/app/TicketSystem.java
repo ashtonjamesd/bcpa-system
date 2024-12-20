@@ -40,9 +40,6 @@ public final class TicketSystem
             }
 
             _viewManager.getActiveView().show();
-            
-            // System.out.println(_viewManager.getActiveView());
-            // _viewManager.widgetService().wait_();
         }
     }
 

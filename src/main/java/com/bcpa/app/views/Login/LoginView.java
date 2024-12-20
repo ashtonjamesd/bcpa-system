@@ -21,7 +21,7 @@ public final class LoginView extends PageView
         {
             _viewManager.ioReader().clear();
 
-            final String title = _viewManager.widgetService().toTitle("BCPA Ticket System Login");
+            final String title = "\n" + _viewManager.widgetService().toTitle("BCPA Ticket System Login");
             _viewManager.ioReader().write(title);
 
             try 
