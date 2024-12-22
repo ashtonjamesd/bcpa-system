@@ -10,14 +10,17 @@ public final class ServiceContainer implements IServiceContainer {
     
     private ServiceContainer() {}
 
-    public static synchronized ServiceContainer instance() {
-        if (instance == null) {
+    public static synchronized ServiceContainer instance()
+    {
+        if (instance == null)
+        {
             instance = new ServiceContainer();
         }
+        
         return instance;
     }
 
-    private final Map<Type, Type> registry = new HashMap<>();
+    private static final Map<Type, Type> registry = new HashMap<>();
 
     /**
      * Registers a service implementation with its interface.
@@ -27,7 +30,8 @@ public final class ServiceContainer implements IServiceContainer {
      * @param interfaceType The interface class.
      * @param implementationType The implementation class.
      */
-    public <TInterface, TType extends TInterface> void register(final Class<TInterface> interfaceType, final Class<TType> implementationType) {
+    public synchronized <TInterface, TType extends TInterface> void register(final Class<TInterface> interfaceType, final Class<TType> implementationType)
+    {
         registry.put(interfaceType, implementationType);
     }
 
@@ -39,8 +43,10 @@ public final class ServiceContainer implements IServiceContainer {
      * @return An instance of the resolved type or null if resolution fails.
      */
     @SuppressWarnings("unchecked")
-    public <T> T resolve(final Class<T> type) {
-        try {
+    public <T> T resolve(final Class<T> type)
+    {
+        try
+        {
             final Type implementationType = registry.getOrDefault(type, type);
             final Class<T> implementationClass = (Class<T>)implementationType;
 
@@ -50,7 +56,9 @@ public final class ServiceContainer implements IServiceContainer {
             final Object[] parameters = resolveConstructorParameters(targetConstructor);
 
             return implementationClass.cast(targetConstructor.newInstance(parameters));
-        } catch (final Exception ex) {
+        } 
+        catch (final Exception ex)
+        {
             ex.printStackTrace();
             return null;
         }
@@ -62,11 +70,14 @@ public final class ServiceContainer implements IServiceContainer {
      * @param constructors The array of constructors.
      * @return The constructor with the most parameters.
      */
-    private Constructor<?> findConstructorWithMostParameters(Constructor<?>[] constructors) {
+    private Constructor<?> findConstructorWithMostParameters(Constructor<?>[] constructors)
+    {
         Constructor<?> selected = constructors[0];
 
-        for (Constructor<?> constructor : constructors) {
-            if (constructor.getParameterCount() > selected.getParameterCount()) {
+        for (Constructor<?> constructor : constructors)
+        {
+            if (constructor.getParameterCount() > selected.getParameterCount())
+            {
                 selected = constructor;
             }
         }
@@ -81,11 +92,14 @@ public final class ServiceContainer implements IServiceContainer {
      * @return An array of resolved parameters.
      * @throws Exception If resolving a parameter fails.
      */
-    private Object[] resolveConstructorParameters(Constructor<?> constructor) throws Exception {
+    private Object[] resolveConstructorParameters(Constructor<?> constructor)
+        throws Exception
+    {
         final Class<?>[] parameterTypes = constructor.getParameterTypes();
         final Object[] parameters = new Object[parameterTypes.length];
 
-        for (int i = 0; i < parameterTypes.length; i++) {
+        for (int i = 0; i < parameterTypes.length; i++)
+        {
             parameters[i] = resolve(parameterTypes[i]);
         }
 

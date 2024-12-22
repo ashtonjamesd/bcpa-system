@@ -8,13 +8,16 @@ import com.bcpa.app.services.display.WidgetService;
 import com.bcpa.app.services.io.IIOReader;
 import com.bcpa.app.services.io.IOReader;
 import com.bcpa.app.utils.AppMode;
+import com.bcpa.app.views.BookingPayment.BookingPaymentViewController;
 import com.bcpa.app.views.EventDetails.EventDetailsViewController;
 import com.bcpa.app.views.Events.EventViewController;
 import com.bcpa.app.views.Home.HomeView;
+import com.bcpa.app.views.Home.HomeViewController;
 import com.bcpa.app.views.Login.LoginView;
 import com.bcpa.app.views.Login.LoginViewController;
 import com.bcpa.app.views.Profile.ProfileViewController;
 import com.bcpa.app.views.Register.RegisterView;
+import com.bcpa.app.views.ShowBooking.ShowBookingViewController;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.app.views.ViewManager.ViewManager;
 import com.bcpa.authentication.factories.Customer.CustomerFactory;
@@ -31,6 +34,8 @@ import com.bcpa.event.repositories.EventRespository;
 import com.bcpa.event.repositories.IEventRepository;
 import com.bcpa.event.services.EventService;
 import com.bcpa.event.services.IEventService;
+import com.bcpa.logger.ConsoleLogger;
+import com.bcpa.logger.ILogger;
 
 /**
  * @authors Ashton Dunderdale, Harrison O'Leary, Joshua Ford, Natalie O'Callaghan
@@ -52,7 +57,7 @@ public final class App
         app.setMode(AppMode.Debug);
         app.run();
 
-        // l: 2200, vf nbu | c: 54...
+        // l: 2800, vf nbu | c: 57...
     }
 
     /// i decided to create my own autowiring service injection container as it is just cool to do
@@ -64,6 +69,9 @@ public final class App
         // other services
         container.register(DbContext.class, DbContext.class);
         container.register(PasswordHasher.class, PasswordHasher.class);
+        container.register(IIOReader.class, IOReader.class);
+        container.register(IWidgetService.class, WidgetService.class);
+        container.register(IViewManager.class, ViewManager.class);
 
         // factories
         container.register(ICustomerFactory.class, CustomerFactory.class);
@@ -75,22 +83,23 @@ public final class App
 
        // services 
         container.register(IAuthService.class, AuthService.class);
-        container.register(IIOReader.class, IOReader.class);
-        container.register(IWidgetService.class, WidgetService.class);
-        container.register(IViewManager.class, ViewManager.class);
         container.register(IEventService.class, EventService.class);
+        container.register(ILogger.class, ConsoleLogger.class);
 
-        // views
+        // non-primitive dependency views
         container.register(HomeView.class, HomeView.class);
         container.register(LoginView.class, LoginView.class);
         container.register(RegisterView.class, RegisterView.class);
 
-        // controllers
+        // view controllers
+        container.register(HomeViewController.class, HomeViewController.class);
         container.register(LoginViewController.class, LoginViewController.class);
         container.register(EventDetailsViewController.class, EventDetailsViewController.class);
         container.register(EventViewController.class, EventViewController.class);
         container.register(ProfileViewController.class, ProfileViewController.class);
-
+        container.register(BookingPaymentViewController.class, BookingPaymentViewController.class);
+        container.register(ShowBookingViewController.class, ShowBookingViewController.class);
+        
         container.register(TicketSystem.class, TicketSystem.class);
 
         isRegistered = true;

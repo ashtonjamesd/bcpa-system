@@ -7,7 +7,10 @@ import com.bcpa.app.views.Events.EventViewController;
 import com.bcpa.app.views.Events.EventsView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.authentication.mappers.UserRoleMapper;
+import com.bcpa.authentication.models.Agent;
+import com.bcpa.authentication.models.Customer;
 import com.bcpa.authentication.models.User;
+import com.bcpa.authentication.models.VenueManager;
 import com.bcpa.authentication.services.IAuthService;
 
 public final class ProfileViewController
@@ -31,9 +34,9 @@ public final class ProfileViewController
         _viewManager.ioReader().write(title);
 
         final String details = switch (user.role) {
-            case Customer     -> getCustomerDetails(user);
-            case Agent        -> getAgentDetails(user);
-            case VenueManager -> getVenueManagerDetails(user);
+            case Customer     -> getCustomerDetails((Customer)user);
+            case Agent        -> getAgentDetails((Agent)user);
+            case VenueManager -> getVenueManagerDetails((VenueManager)user);
             default           -> "";
         };
 
@@ -70,6 +73,13 @@ public final class ProfileViewController
                 continue;
             }
 
+            if (newPassword.equals(oldPassword))
+            {
+                _viewManager.ioReader().write("\nNew password cannot be the same as the old password.");
+                _viewManager.ioReader().readKey();
+                continue;
+            }
+
             final var result = _authService.loginUser(user.username, oldPassword);
             if (result.value == null) 
             {
@@ -90,20 +100,27 @@ public final class ProfileViewController
         }
     }
 
-    private final String getCustomerDetails(User user)
+    private final String getCustomerDetails(Customer customer)
     {
-        return "";
+        final String username = "Username: " + customer.username + "\n";
+        final String role =     "Role:     " + UserRoleMapper.map(customer.role) + "\n";
+        final String address =  "Address:  " + customer.address;
+        
+        return username + role + address;
     }
     
-    private final String getAgentDetails(User user)
+    private final String getAgentDetails(Agent agent)
     {
-        return "";
+        final String username = "Username: " + agent.username + "\n";
+        final String role =     "Role:     " + UserRoleMapper.map(agent.role);
+        
+        return username + role;
     }
 
-    private final String getVenueManagerDetails(User user)
+    private final String getVenueManagerDetails(VenueManager venueManager)
     {
-        final String username = "Username: " + user.username;
-        final String role = "\nRole:       " + UserRoleMapper.map(user.role);
+        final String username = "Username: " + venueManager.username + "\n";
+        final String role =     "Role:     " + UserRoleMapper.map(venueManager.role);
         
         return username + role;
     }

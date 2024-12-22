@@ -5,6 +5,8 @@ import com.bcpa.app.utils.AppMode;
 import com.bcpa.app.views.PageView;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
+import com.bcpa.logger.ConsoleLogger;
+import com.bcpa.logger.ILogger;
 
 public final class TicketSystem
 {
@@ -12,38 +14,47 @@ public final class TicketSystem
     public static PageView GlobalActivePage = null;
 
     private final IViewManager _viewManager;
+    private final ILogger _logger;
 
     private AppMode _mode;
     public static boolean isExitRequested = false;
 
-    public TicketSystem(final IViewManager viewManager)
+    public TicketSystem(final IViewManager viewManager, final ConsoleLogger logger)
     {
         _viewManager = viewManager;
+        _logger = logger;
     }
 
     public final void run()
     {
         if (_mode == null)
         {
-            System.err.println("App mode was net set before app.run was called.");
+            _logger.LogError("App mode was net set before app.run was called.");
             return;
         }
 
-        // The initial active page for the application is the home page.
-        _viewManager.setActiveView(App.container.resolve(HomeView.class));
-
-        while (true)
+        try
         {
-            if (isExitRequested) {
-                _viewManager.ioReader().write("Thank you for using the BCPA Ticket System.");
-                break;
-            }
+            // The initial active page for the application is the home page.
+            _viewManager.setActiveView(App.container.resolve(HomeView.class));
 
-            _viewManager.getActiveView().show();
+            while (true)
+            {
+                if (isExitRequested) {
+                    _viewManager.ioReader().write("Thank you for using the BCPA Ticket System.");
+                    break;
+                }
+
+                _viewManager.getActiveView().show();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.getMessage());
         }
     }
 
-    public final void setMode(final AppMode mode) 
+    public final void setMode(final AppMode mode)
     {
         _mode = mode;
     }

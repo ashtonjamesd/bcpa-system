@@ -1,5 +1,9 @@
 package com.bcpa.app.views.ShowBooking;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.event.enums.SeatStatus;
 import com.bcpa.event.models.Seat;
@@ -11,6 +15,8 @@ public final class ShowBookingViewController {
 
     private int currentRow = 0;
     private int currentCol = 0;
+
+    private List<Seat> selectedSeats = new ArrayList<Seat>();
 
     public ShowBookingViewController(final IViewManager viewManager)
     {
@@ -24,43 +30,86 @@ public final class ShowBookingViewController {
         final var title = _viewManager.widgetService().toTitle("Show Booking: " + show.getVenue());
         _viewManager.ioReader().write(title);
 
-        boolean exit = false;
+        _viewManager.ioReader().clear();
 
-        while (!exit)
+        displaySeatLayout(show);
+        displayActiveSeatDetails(show);
+        displaySelectedSeats();
+
+        final var input = _viewManager.ioReader()
+            .read("\nUse WASD to move, Q to quit, E to book, F to finish booking: ");
+        
+        if (input.isBlank() || input.isEmpty()) return;
+
+        switch (input.charAt(0))
         {
-            _viewManager.ioReader().clear();
-            displaySeatLayout(show);
-            displayActiveSeatDetails(show);
-
-            final var input = _viewManager.ioReader()
-                .read("\nUse WASD to move, Q to quit: ");
-            
-            if (input.isBlank() || input.isEmpty()) continue;
-
-            switch (input.charAt(0))
-            {
-                case 'w': moveUp(show); break;
-                case 'a': moveLeft(show); break;
-                case 's': moveDown(show); break;
-                case 'd': moveRight(show); break;
-                case 'q': exit = true; break;
-                case 'e': onSeatSelected();
-                default: break;
-            }
+            case 'w': moveUp(show); break;
+            case 'a': moveLeft(show); break;
+            case 's': moveDown(show); break;
+            case 'd': moveRight(show); break;
+            case 'q': onExitRequested(); break;
+            case 'e': onSeatSelected(show); break;
+            case 'f': onBookingFinished(); break;
+            default: break;
         }
     }
 
-    private final void onSeatSelected()
+    private final void onBookingFinished()
     {
         
     }
 
+    private final void onExitRequested()
+    {
+        isBackRequested = true;
+        _viewManager.setActiveView(HomeView.class);
+    }
+
+    private final void onSeatSelected(final Show show)
+    {
+        final List<Seat> seats = show.getSeats();
+        
+        for (final Seat seat : seats)
+        {
+            if (seat.getCol() == currentCol && seat.getRow() == currentRow) 
+            {
+                if (selectedSeats.contains(seat))
+                {
+                    selectedSeats.remove(seat);
+                    seat.setStatus(SeatStatus.Open);
+
+                    _viewManager.ioReader().write("Removed seat from booking.");
+                    _viewManager.ioReader().readKey();
+                    break;
+                }
+
+                if (seat.getStatus() == SeatStatus.Booked) 
+                {
+                    _viewManager.ioReader().write("This seat is already booked.");
+                    _viewManager.ioReader().readKey();
+                    break;
+                }
+
+                if (seat.getStatus() == SeatStatus.Held) 
+                {
+                    _viewManager.ioReader().write("This seat is currently being held.");
+                    _viewManager.ioReader().readKey();
+                    break;
+                }
+
+                selectedSeats.add(seat);
+                seat.setStatus(SeatStatus.Held);
+
+                _viewManager.ioReader().write("Added seat: " + seat.getPosition());
+                _viewManager.ioReader().readKey();
+                break;
+            }
+        }
+    }
+
     private final void moveUp(final Show show)
     {
-        if (currentRow > 0)
-        {
-            currentRow--;
-        }
+        if (currentRow > 0) currentRow--;
     }
 
     private final void moveDown(final Show show)
@@ -69,18 +118,12 @@ public final class ShowBookingViewController {
             .stream().mapToInt(Seat::getRow)
             .max().orElse(0);
 
-        if (currentRow < maxRow)
-        {
-            currentRow++;
-        }
+        if (currentRow < maxRow) currentRow++;
     }
 
     private final void moveLeft(final Show show)
     {
-        if (currentCol > 0)
-        {
-            currentCol--;
-        }
+        if (currentCol > 0) currentCol--;
     }
 
     private final void moveRight(final Show show)
@@ -89,26 +132,34 @@ public final class ShowBookingViewController {
             .filter(seat -> seat.getRow() == currentRow)
             .mapToInt(Seat::getCol).max().orElse(0);
             
-        if (currentCol < maxCol)
+        if (currentCol < maxCol) currentCol++;
+    }
+
+    private final void displaySelectedSeats() 
+    {
+        if (selectedSeats.isEmpty()) return;
+
+        _viewManager.ioReader().write("\nBooked: ");
+
+        System.out.print("  ");
+        for (final Seat seat : selectedSeats) 
         {
-            currentCol++;
+            System.out.print(seat.getPosition() + ", ");
         }
+
+        System.out.println();
     }
 
     private final void displaySeatLayout(final Show show)
     {
-        System.out.println("\nSeats:\n");
+        _viewManager.ioReader().write("\nSeats:\n");
     
         int currentRowDisplay = -1;
         for (Seat seat : show.getSeats())
         {
             if (seat.getRow() != currentRowDisplay)
             {
-                if (currentRowDisplay != -1)
-                {
-                    System.out.println();
-                }
-
+                if (currentRowDisplay != -1) System.out.println();
                 currentRowDisplay = seat.getRow();
             }
     
@@ -149,13 +200,13 @@ public final class ShowBookingViewController {
 
         if (activeSeat != null)
         {
-            System.out.println("\nSelected Seat Details:");
-            System.out.println("  Position: " + activeSeat.getPosition());
-            System.out.println("  Status:   " + activeSeat.getStatus());
+            _viewManager.ioReader().write("\nSelected Seat Details:");
+            _viewManager.ioReader().write("  Position: " + activeSeat.getPosition());
+            _viewManager.ioReader().write("  Status:   " + activeSeat.getStatus());
         }
         else
         {
-            System.out.println("\nNo active seat selected.");
+            _viewManager.ioReader().write("\nNo active seat selected.");
         }
     }
 }

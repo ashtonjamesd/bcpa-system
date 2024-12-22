@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.bcpa.authentication.models.Customer;
 import com.bcpa.authentication.models.User;
-import com.bcpa.authentication.models.VenueManager;
 import com.bcpa.authentication.repositories.UserRepository;
 import com.bcpa.authentication.services.PasswordHasher;
 import com.bcpa.event.enums.SeatStatus;
@@ -45,7 +45,7 @@ public final class DbContext implements IDbContext
                 show.setDateTime(new Date());
                 event.addShow(show);
 
-                for (int row = 0; row < rnd.nextInt(7, 14); row++) {
+                for (int row = 0; row < rnd.nextInt(3, 7); row++) {
                     for (int col = 0; col < rnd.nextInt(10, 22); col++) {
                         String position = String.format("%c%d", 'A' + row, col + 1);
 
@@ -62,7 +62,7 @@ public final class DbContext implements IDbContext
             }
 
             UserRepository repo = new UserRepository(this, new PasswordHasher());
-            repo.createUser(new VenueManager("admin", "admin"));
+            repo.createUser(new Customer("a", "a", "address"));
             
             events.add(event);
         }
