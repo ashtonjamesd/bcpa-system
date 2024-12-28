@@ -56,7 +56,7 @@ public final class DbContext implements IDbContext
                         if (seatStatusIdx == 1) status = SeatStatus.Booked;
                         if (seatStatusIdx == 2) status = SeatStatus.Open;
 
-                        show.getSeats().add(new Seat(position, row, col, status));
+                        show.getSeats().add(new Seat(position, row, col, status, 29.99));
                     }
                 }
             }

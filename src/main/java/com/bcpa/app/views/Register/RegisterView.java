@@ -45,15 +45,15 @@ public final class RegisterView extends PageView
             {
                 _viewManager.widgetService().showLoadingIcon("\nUser successfully created, navigating to login page");
                 _viewManager.setActiveView(LoginView.class);
-                break;
             }
             else
             {
                 _viewManager.ioReader().write("\nUnable to create user: " + result.error);
                 _viewManager.ioReader().readKey();
                 _viewManager.setActiveView(HomeView.class);
-                break;
             }
+
+            break;
         }
     }
 }

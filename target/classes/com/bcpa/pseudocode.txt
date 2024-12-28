@@ -1,0 +1,97 @@
+FUNCTION loginUser (username, password)
+    users = getUsers()
+
+    FOR user IN users
+      IF user.username IS username: CONTINUE
+
+      IF checkHash(password, user.password):
+        RETURN user
+    
+    RETURN NULL
+
+FUNCTION registerUser (newUser)
+    users = getUsers()
+
+    FOR user IN users
+      IF user.username IS newUser.username
+        RETURN NULL
+    
+    user = createUser(newUser);
+    RETURN user
+
+SINGLETON CLASS ServiceContainer
+  PUBLIC MAP OF Type:Type Registry
+  
+  FUNCTION register(interface, impl)
+    Registry ADD (interface, impl)
+
+  FUNCTION resolve(type)
+    implType = Registry.getType(type, type)
+    constructor = implType.getConstructor()
+
+    parameters = resolveParameters(constructor)
+    RETURN NEW INSTANCE OF constructor WITH parameters
+
+  FUNCTION resolveParameters(constructor)
+    parameters = constructor.getParameters()
+
+    FOR parameter IN parameters
+      parameters.Add(resolve(parameter))
+    
+    RETURN parameters
+
+
+CLASS RegisterView INHERITS FROM PageView
+  FUNCTION show()
+    WHILE TRUE
+      PRINT "BCPA Ticket System Register"
+
+      username = INPUT()
+      password = INPUT()
+      address = INPUT()
+
+      user = createUser()
+      result = registerUser(user)
+
+      if result.isSuccess
+        PRINT "Successfully created user"
+        GOTO LoginPage
+      else
+        PRINT "Unable to create user"
+        GOTO HomePage
+      
+      BREAK
+
+ABSTRACT CLASS User
+  PUBLIC string username
+  PUBLIC string password
+  PUBLIC UserRole role
+
+
+CLASS Customer INHERITS User
+  PUBLIC string address
+
+  CONSTRUCTOR(username, password, address)
+    role = Customer
+
+    THIS username = username
+    THIS password = password
+    THIS address = address
+
+CLASS Agent INHERITS User
+  PUBLIC string address
+
+  CONSTRUCTOR(username, password)
+    role = Agent
+
+    THIS username = username
+    THIS password = password
+
+CLASS VenueManager INHERITS User
+  PUBLIC string address
+
+  CONSTRUCTOR(username, password)
+    role = VenueManager
+
+    THIS username = username
+    THIS password = password

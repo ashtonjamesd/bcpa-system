@@ -1,13 +1,21 @@
 package com.bcpa.app.views.BookingPayment;
 
-import com.bcpa.app.views.PageView;
+import java.util.List;
 
-public final class BookingPaymentView extends PageView {
+import com.bcpa.app.views.PageView;
+import com.bcpa.event.models.Seat;
+
+public final class BookingPaymentView extends PageView
+{
     final BookingPaymentViewController _controller;
 
-    public BookingPaymentView(final BookingPaymentViewController controller) 
+    private final List<Seat> _seats;
+
+
+    public BookingPaymentView(final BookingPaymentViewController controller, final List<Seat> seats) 
     {
         _controller = controller;
+        _seats = seats;
     }
 
     @Override
@@ -15,7 +23,7 @@ public final class BookingPaymentView extends PageView {
     {
         while (!_controller.isBackRequested)
         {
-            _controller.run();
+            _controller.run(_seats);
         }
     }
 }

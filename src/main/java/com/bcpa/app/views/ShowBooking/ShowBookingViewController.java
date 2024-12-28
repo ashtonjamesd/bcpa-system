@@ -3,6 +3,9 @@ package com.bcpa.app.views.ShowBooking;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bcpa.App;
+import com.bcpa.app.views.BookingPayment.BookingPaymentView;
+import com.bcpa.app.views.BookingPayment.BookingPaymentViewController;
 import com.bcpa.app.views.Home.HomeView;
 import com.bcpa.app.views.ViewManager.IViewManager;
 import com.bcpa.event.enums.SeatStatus;
@@ -56,7 +59,27 @@ public final class ShowBookingViewController {
 
     private final void onBookingFinished()
     {
+        if (selectedSeats.isEmpty())
+        {
+            _viewManager.ioReader().write("No seats have been selected.");
+            _viewManager.ioReader().readKey();
+            return;
+        }
+
+        _viewManager.ioReader().clear();
+        _viewManager.ioReader().write("Selected seat bookings:");
+        for (Seat seat : selectedSeats)
+        {
+            _viewManager.ioReader().write("  " + seat.getPosition());
+        }
+
+        boolean continueToPayment = _viewManager.widgetService().getChoice("\nContinue to payment?");
         
+        if (continueToPayment)
+        {
+            isBackRequested = true;
+            _viewManager.setActiveView(new BookingPaymentView(App.container.resolve(BookingPaymentViewController.class), selectedSeats));
+        } 
     }
 
     private final void onExitRequested()
@@ -203,6 +226,15 @@ public final class ShowBookingViewController {
             _viewManager.ioReader().write("\nSelected Seat Details:");
             _viewManager.ioReader().write("  Position: " + activeSeat.getPosition());
             _viewManager.ioReader().write("  Status:   " + activeSeat.getStatus());
+            _viewManager.ioReader().write("  Price:    £" + activeSeat.getPrice());
+
+            double totalPrice = 0.00;
+            for (Seat seat : selectedSeats)
+            {
+                totalPrice += seat.getPrice();
+            }
+
+            _viewManager.ioReader().write("  Total:    £" + totalPrice);
         }
         else
         {
